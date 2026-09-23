@@ -1,0 +1,5 @@
+LIVE_PHOTO_UI/node_modules
+LIVE_PHOTO_UI/build
+**/__pycache__/
+/.venv/
+/LIVE_PHOTO_UI_1/

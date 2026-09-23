@@ -1,0 +1,10 @@
+numpy==1.26.4
+scipy==1.12.0
+imutils==0.5.4
+opencv-python-headless==4.5.4.60
+# dlib==19.22.0
+cmake==3.28.3
+imageai==3.0.3
+torch==2.3.0
+pandas==2.2.2
+dependencies/dlib-19.22.99-cp39-cp39-win_amd64.whl

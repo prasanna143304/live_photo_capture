@@ -1,0 +1,6 @@
+{
+    "BG_PATH" : "dependencies/bg.jpg",
+    "PASCALVOC_MODEL_PATH" : "dependencies/xception_pascalvoc.pb",
+    "INPUT_JSON_PATH": "C:/FILES/PROCESS_IMAGE_SEGMENATION/INPUT_JSON",
+    "THREAD": 2
+}

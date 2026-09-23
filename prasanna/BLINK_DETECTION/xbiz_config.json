@@ -1,0 +1,14 @@
+{
+    "ffmpeg_path" : "C:/code_repos/Digi_Live_Photo_Capture/BLINK_DETECTION/dependencies/ffmpeg.exe",
+    "shape_predictor_path": "C:/code_repos/Digi_Live_Photo_Capture/BLINK_DETECTION/dependencies/face_landmark.dat",
+    "override": 1,
+    "frame_consec": 3,
+    "eye_thresh": 0.27,
+    "THREAD": 1,
+    "max_frame_cnt": 300,
+    "INPUT_JSON_PATH": "C:/FILES/PROCESS_BLINK_DETECTION/INPUT_JSON",
+    "TEMP": [
+        "dependencies/ffmpeg.exe",
+        "/app/LIVE_PHOTO/FILES/PROCESS_BLINK_DETECTION/INPUT_JSON"
+    ]
+}
