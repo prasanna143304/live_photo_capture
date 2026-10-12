@@ -109,7 +109,12 @@ def createFoldersV2(file_path):
 
 def createFolders_core():
     folder_path = f"{config.CORE_PATH}"
-    dirs = ["PROCESS_BLINK_DETECTION", "PROCESS_IMAGE_SEGMENATION", "PROCESS_SIGN_DETECTION", "TRANSACTIONS"]
+    dirs = [
+        "PROCESS_BLINK_DETECTION/INPUT_JSON",
+        "PROCESS_IMAGE_SEGMENATION/INPUT_JSON",
+        "PROCESS_SIGN_DETECTION/INPUT_JSON",
+        "TRANSACTIONS",
+    ]
     for dir in dirs:
         os.makedirs(f"{folder_path}/{dir}", exist_ok=True)
 
@@ -402,6 +407,8 @@ def customer_live_photo_video_capture():
         myRequest = get_request()
         print("my request", myRequest)
         if isinstance(myRequest, str): return {"Liveness_Status":"FALSE", "message": "Incorrect Request"}
+        if not myRequest.get("TXNID") or myRequest["TXNID"].startswith("null~"):
+            return {"Liveness_Status": "FALSE", "message": "Missing transaction_id. Start the UI with a valid transaction_id query parameter."}
         createFolders(myRequest)
         input_json = {}
         input_json["FILE"] = myRequest["FILEDATA"]
@@ -416,13 +423,17 @@ def customer_live_photo_video_capture():
         original_json_path = os.path.join(config.INPUT_PATH, unique_id + ".json")
         open(original_json_path, "w", encoding="utf-8").write(json.dumps(input_json, indent=4))
         print("IMAGE SEGMENTATION PATH",config.INPUT_PATH_IMAGE_SEGMENTATION)
+        output_json_path = f"{config.DESTINATION_DIR}{myRequest['TXNID'].split('~')[0]}/OUTPUT_JSON_PATH/{myRequest['TXNID']}.json"
         for i in range(120):
-            if os.path.exists(f"{config.DESTINATION_DIR}{myRequest['TXNID'].split('~')[0]}/OUTPUT_JSON_PATH/{myRequest['TXNID']}.json"):
+            if os.path.exists(output_json_path):
                 break
             else:
                 time.sleep(1)
         else:
-            return {"Liveness_Status":"FALSE", "message": "Request Timeout"}
+            return {
+                "Liveness_Status": "FALSE",
+                "message": "Blink detection service did not return a result. Check that its dependencies and face landmark model are installed."
+            }
         if myRequest['WHITE_FLAG'] == '1':
             input_json = {}
             input_json["OUTPUT_TEMPLATE_PATH"] = f"{config.DESTINATION_DIR}{myRequest['TXNID'].split('~')[0]}/OUTPUT_TEMPLATE_PATH/"
@@ -437,7 +448,7 @@ def customer_live_photo_video_capture():
             #         time.sleep(1)
             # else:
             #     return {"Liveness_Status":"FALSE", "message": "Request Timeout"}
-        result_json = json.loads(open(f"{config.DESTINATION_DIR}{myRequest['TXNID'].split('~')[0]}/OUTPUT_JSON_PATH/{myRequest['TXNID']}.json", "r", encoding="utf-8").read())
+        result_json = json.loads(open(output_json_path, "r", encoding="utf-8").read())
         result = {}
         if "Group Photo" in result_json:
             result["Group_Photo"] = result_json["Group Photo"]

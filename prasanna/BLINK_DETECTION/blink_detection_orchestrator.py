@@ -1,5 +1,7 @@
 import os
 import time
+import sys
+import subprocess
 from os import listdir
 from os.path import isfile, join
 import threading
@@ -30,10 +32,10 @@ def process(thread):
     try:
         if os.path.exists(os.path.join(curr_dir, "thread.pyc")):
             thread_path = os.path.join(curr_dir, "thread.pyc")
-            os.system("python \"" + thread_path + "\" " + thread)
+            subprocess.Popen([sys.executable, thread_path, thread])
         elif os.path.exists(os.path.join(curr_dir, "thread.py")):
             thread_path = os.path.join(curr_dir, "thread.py")
-            os.system("python \"" + thread_path + "\" " + thread)
+            subprocess.Popen([sys.executable, thread_path, thread])
         else:
             thread_path = os.path.join(curr_dir, "thread.exe")
             os.system(thread_path + "\" " + thread)
